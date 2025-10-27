@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Student model - Main user model with authentication
+model Student {
+  bagNo        String   @id @map("bag_no") // Primary key: B-XXX or G-XXX format
+  name         String
+  email        String   @unique
+  enrollmentNo String   @unique @map("enrollment_no")
+  password     String   // Will be hashed with bcrypt
+  phoneNo      String   @map("phone_no")
+  residencyNo  String   @map("residency_no")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  orders       Order[]
+
+  @@map("api_student")
+}
+
+// Washerman model - Service provider authentication
+model Washerman {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String   // Will be hashed with bcrypt
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("api_washerman")
+}
+
+// Order model - Laundry order tracking
+model Order {
+  id              Int      @id @default(autoincrement())
+  bagNo           String   @map("bag_no")
+  numberOfClothes Int      @map("number_of_clothes")
+  status          Status   @default(PENDING)
+  submissionDate  DateTime @default(now()) @map("submission_date")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  student         Student  @relation(fields: [bagNo], references: [bagNo], onDelete: Cascade)
+
+  @@index([bagNo])
+  @@index([status])
+  @@map("api_order")
+}
+
+// Order status enum
+enum Status {
+  PENDING    @map("pending")
+  INPROGRESS @map("inprogress")
+  COMPLETE   @map("complete")
+
+  @@map("api_order_status")
+}
