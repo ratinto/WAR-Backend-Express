@@ -24,8 +24,12 @@ export const config: Config = {
 
 // Validate critical config
 if (!config.databaseUrl) {
-  console.error('❌ ERROR: DATABASE_URL is not defined in environment variables');
-  process.exit(1);
+  console.warn('⚠️  WARNING: DATABASE_URL is not defined in environment variables');
+  // Don't exit on Vercel - just warn
+  if (config.nodeEnv === 'development') {
+    console.error('❌ ERROR: DATABASE_URL is required in development');
+    process.exit(1);
+  }
 }
 
 export default config;
