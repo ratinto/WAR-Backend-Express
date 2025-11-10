@@ -11,7 +11,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:push": "prisma db push",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel-build": "prisma generate && tsc"
   },
   "keywords": [
     "express",
@@ -24,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.20.0",
+    "@vercel/node": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
