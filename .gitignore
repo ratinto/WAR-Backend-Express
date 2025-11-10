@@ -31,7 +31,7 @@ Thumbs.db
 *~
 
 # Prisma
-prisma/migrations/*.sql
+# prisma/migrations/*.sql
 
 # Testing
 coverage/
